@@ -1,0 +1,76 @@
+@font-face {
+ font-family: 'StratumWebBold';
+ src: url('../plugins/fonts/Stratum2WebBold.woff');
+}
+
+@font-face {
+ font-family: 'StratumWebBlack';
+ src: url('../plugins/fonts/Stratum2WebBlack.woff');
+}
+
+@font-face {
+ font-family: 'FFDINWebLight';
+ src: url('../plugins/fonts/2F8321_0_0.woff2');
+}
+
+
+footer *,nav *{
+    border-radius:0 !important;    
+}
+
+.container{
+	width:100%;
+}
+
+body{    
+    /*background:url("../plugins/images/background.jpg");*/
+}
+
+.navbar-default{
+    border:none;
+    background:none;    
+}
+
+#navbar{
+    float:right;
+    padding-top:12px;    
+}
+
+#navbar,.navbar-brand span,#callToAction,#bottomMenu li a{
+	font-family:StratumWebBold,sans-serif;
+}
+
+.navbar-default .navbar-nav>li>a {
+    font-size:20px;
+    color:rgb(255,255,255) !important;
+}
+.service{
+    color:black;
+	height:60px;
+    padding:18px;
+    font-size:15px;
+    background:white;
+    text-align:center;
+    text-transform:uppercase;
+    font-family:StratumWebBlack,sans-serif;
+    border-right:solid 1px rgb(128,128,128);
+    border-top:solid 1px rgb(128,128,128);
+    border-bottom:solid 1px rgb(128,128,128);
+}
+
+footer{
+	padding-top:24px;
+	font-family:FFDINWebLight,sans-serif;
+}
+
+#bottomMenu li{
+	list-style-type:none;
+}
+
+#bottomMenu li a{
+	color:white;
+}
+
+.service{
+	cursor:pointer;
+}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <meta name="description" content="html,css,javascript,jquery,ajax,php,mysql,marketing,web,seo,graphics,customer,service">
+      <meta name="author" content="RS9 Media">
+      <title>RS9 Media</title>
+      <link href="resources/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <link href="resources/plugins/bootstrap/css/bootstrapdialog.css" rel="stylesheet">
+      <link href="resources/plugins/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+      <link type="text/css" rel="stylesheet" href="resources/plugins/font-awesome/font-awesome.min.css">
+	  <link href="resources/plugins/gridder/gridder.css" rel="stylesheet">
+      <link type="text/css" rel="stylesheet" href="resources/core/Aviator.css">
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-63340176-3', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+   </head>
+   <body style ="overflow-x:hidden;">
+      <img src = "resources/plugins/images/background.jpg" style = "width:100%;position:absolute;z-index:-1"/>
+      <nav class="navbar navbar-default navbar-static-top">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="#">
+                  <span>
+                     <img src="resources/plugins/images/logo.png" alt="logo" class="logo-default" style="height:210px;margin:0px;">
+                     <!-- Logo Origin: Impervious shelter under which all shall flourish -->
+                  </span>
+                  <span style = "letter-spacing:4px;font-size:28px;color:white;position:relative;top:8px;">
+
+                  </span>
+               </a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+               <ul class="nav navbar-nav">
+                  <li><a id ="About" href="#About">ABOUT</a></li>
+                  <li><a id ="Mission" href="#Mission">MISSION</a></li>
+                  <li><a id ="Assignments" href="#Assignments">ASSIGNMENTS</a></li>
+                  <li><a id ="Contact" href="#Contact">CONTACT</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div id = "spacer" style = "width:100%;min-height:725px;overflow-x:hidden;">
+		<!-- Splash -->
+      </div>
+      <div style ="background:white;">
+         <div class="row">
+            <div class ="col-md-2 service">CONSULTATION</div>
+            <div class ="col-md-2 service">DATABASE ENGINEERING</div>
+            <div class ="col-md-2 service">SOFTWARE ARCHITECTURE</div>
+            <div class ="col-md-2 service">APP INFRASTRUCTURE</div>
+            <div class ="col-md-2 service">WEB DEVELOPMENT</div>
+            <div class ="col-md-2 service">PRODUCT DEVELOPMENT</div>
+         </div>
+	  </div>
+      <div class="row" id ="stage" style ="background:white;min-height:320px;z-index:1">
+            <!-- Dynamically populated by Aviator.js -->
+      </div>
+      <div class="row" style ="background:white;">
+		<div class="row" id = "callToAction" style ="text-align:center;color:white;background:rgb(32,32,32);">
+		   </br>
+		   <h3>YOUR FUTURE IS WAITING</h3>
+		   <h1 style ="font-size:48px;">MAKE YOUR IDEA A REALITY</h1>
+		   </br>
+		</div>
+	  </div>
+      <footer class="footer" style = "background:#161e2c;color:white;">
+         <div class="container">
+            <div class = "row">
+			   <table style = "width:98%;">
+				<tr>
+					<td style = "text-align:left;width:50%;vertical-align:top;">
+					   <ul id = "bottomMenu" style = "float:left;">
+						  <li><a id ="About" href="#About">ABOUT</a></li>
+						  <li><a id ="Mission" href="#Mission">MISSION</a></li>
+						  <li><a id ="Assignments" href="#Assignments">ASSIGNMENTS</a></li>
+						  <li><a id ="Contact" href="#Contact">CONTACT</a></li>
+					   </ul>
+					</td>
+					<td style = "vertical-align:top;">
+					  <form id = "contactForm">
+						 <fieldset class="form-group">
+							<label for="requiredService">What do you need to get started?</label>
+							<select class="form-control" name = "requiredService" id="requiredService">
+							   <option>Consultation</option>
+							   <option>Database Engineering</option>
+							   <option>Software Architecture</option>
+							   <option>App Infrastructure</option>
+							   <option>Web Development</option>
+							   <option>Product Development</option>
+							</select>
+						 </fieldset>
+						 <fieldset class="form-group">
+							<label for="name">What's your name?</label>
+							<input type="text" class="form-control" name = "name" id="name" placeholder = "Enter your name">
+						 </fieldset>
+						 <fieldset class="form-group">
+							<label for="email">What's your email address?</label>
+							<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email">
+							<small class="text-muted">We'll never share your email address with anyone else.</small>
+						 </fieldset>
+						 <fieldset class="form-group">
+							<label for="message">What's on your mind?</label>
+							<textarea class="form-control" name = "message" id="message" rows="3"></textarea>
+						 </fieldset>
+						 <fieldset class="form-group">
+							<div id = "getStartedButton" class ="btn btn-success">GET STARTED</div>
+						 </fieldset>
+					  </form>
+					</td>
+				</tr>
+			   </table>
+            </div>
+            <div class="row">
+               <div class="col-lg-12 copyright" style = "text-align:center;padding:16px;font-size:18px;">
+                  <p>&copy; 2016 RS9 Media </p>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	  <script type = "text/javascript">
+		(function($) {
+			$.fn.goTo = function() {
+				$('html, body').animate({
+					scrollTop: ($(this).offset().top) + 'px'
+				}, 'fast');
+				return this; // for chaining...
+			}
+		})(jQuery);
+
+		(function($) {
+			$.fn.clearTheDeck = function() {
+				$(this).empty().append(
+					$("<i>").addClass("fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom")
+				);
+				//Send it back
+				return this; // for chaining...
+			}
+		})(jQuery);
+
+      $(document).ready(function(){
+		var width = $("body").width();
+		if(width > 1200){
+			$("#spacer").css("min-height","715px");
+		}
+		else{
+			$("#spacer").css("min-height","320px");
+		}
+
+		//alert(width);
+	  });
+	  </script>
+      <!-- AGX -->
+      <script src="resources/plugins/bootstrap/js/bootstrap.min.js"></script>
+      <script src="resources/plugins/bootstrap/js/bootstrapdialog.js"></script>
+      <script src="resources/plugins/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+      <script src="resources/plugins/paginate/paginate.js"></script>
+	  <script src="resources/plugins/gridder/gridder.js"></script>
+      <!-- AGX -->
+      <script src='resources/core/js/agx.js'></script>
+      <!-- TinyMCE -->
+      <script src='http://cdn.tinymce.com/4/tinymce.min.js'></script>
+      <!-- jQuery UI -->
+      <script src='resources/core/js/jquery.ui.js'></script>
+      <!-- DateTimePicker -->
+      <script src='resources/core/js/jquery.datetimepicker.min.js'></script>
+      <!-- Countdown -->
+      <script src='resources/core/js/jquery.countdown.min.js'></script>
+      <!-- Library -->
+      <script src='resources/core/js/jquery.library.js'></script>
+      <!-- Dropzone -->
+      <script src='resources/core/js/dropzone.js'></script>
+      <script src="resources/core/Aviator.js"></script>
+   </body>
+</html>

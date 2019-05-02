@@ -1,0 +1,289 @@
+<style type = 'text/css'>
+   #tacticalCommandForm .col-md-2{
+   height:40px;
+   font-size:20px;
+   text-align:right;
+   }
+   .countDown{
+   width:205px !important;
+   }
+</style>
+<script type = 'text/javascript'>
+   var ProjectInsight = function() {
+       //Global reference
+       var self = this;
+       //Define AGX Handle
+       self.agxHandle = new AGX({
+           'apiEndpoint': 'Insight',
+           'apiUrl': 'https://api.asgardia.io',
+           'apiKey': 'b1e2b9023e5836857ff716271fbdc660'
+       });
+       //Constructor
+       self.constructor = function() {
+           //Initialize tinyMCE
+           tinymce.init({
+               selector: 'textarea',
+               height: 500,
+               menubar: false,
+               plugins: [
+                   'advlist autolink lists link image charmap print preview anchor textcolor',
+                   'searchreplace visualblocks code fullscreen',
+                   'insertdatetime media table contextmenu paste code wordcount'
+               ],
+               toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+               content_css: [
+                   '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                   '//www.tinymce.com/css/codepen.min.css'
+               ]
+           });
+		   /*
+           //DateTimePicker
+           var dateObject = new Date();
+           dateObject.setDate(dateObject.getDate() + 3);
+           var rightNow = dateObject.getFullYear() + '-' + (dateObject.getMonth() + 1) + '-' + dateObject.getDate() + ' ' + dateObject.getHours() + ':' + dateObject.getMinutes() + ':' + '00';
+           $('#taskDueDate').val(rightNow).datetimepicker({
+               'format': 'Y-m-d H:i:s'
+           });
+		   */
+           //Search
+           $("#searchTerm").keyup(function(){
+               //searchTerm
+               var searchTerm = $(this).val();
+               //Make sure have enough
+               if(searchTerm.length >= 3){
+                   self.reviewTasks(searchTerm);
+               }
+           });
+           //Review Tasks
+           self.reviewTasks();
+           //#refreshTasksButton
+           $('#refreshTasksButton').click(function() {
+               self.reviewTasks();
+           });
+           //#doTheThingButton
+           $('#doTheThingButton').click(function() {
+               if (confirm('You sure about this, Chief?')) {
+                   //Task Data
+                   var taskData = {
+                       'taskRequesterEmail':'brooks@fenrisenterprise.com',
+                       'taskDetail': tinymce.activeEditor.getContent(),
+                       'taskType': $('#taskType').val(),
+                       'taskDueDate': $('#taskDueDate').val(),
+                       'taskPipeline': $('#taskPipeline').val(),
+                       'applicationId': 'W_RS9_' + self.agxHandle.Utility.randomString(),
+                   };
+                   //Do the thing
+                   self.agxHandle.Core.processClientData(taskData, 'createTask', function(result) {
+                       if (result.success == true) {
+                           //Notify what's up
+                           alert('Task created successfully.');
+                           //Clear the deck
+                           tinymce.activeEditor.setContent('');
+                           //Refresh
+                           self.reviewTasks();
+                       }
+                       else {
+                           alert('An error occurred while creating the task.');
+                       }
+                   });
+               };
+           });
+       };
+       //Review Tasks
+       self.reviewTasks = function(searchTerm) {
+           if(searchTerm){
+               console.log("Sendin search term");
+               if(searchTerm.length > 0){
+                   $.ajaxSetup({
+                       "data":{
+                           "searchTerm":searchTerm
+                       }
+                   });
+               }
+               else{
+                   console.log("NOT Sendin search term");
+                   $.ajaxSetup({
+                       "data":{}
+                   });
+               }
+           }
+           self.agxHandle.Core.executeDataPathway('reviewTasksByApplicationId:W_RS9', function() {
+               //Clear searchTerm
+               $.ajaxSetup({
+                   "data":{}
+               });
+               //Do the thing
+               $('#taskList').find('tr').each(function(i) {
+                   //Internal ref
+                   var task = $(this);
+                   //Zebras!
+                   if (i % 2) {
+                       $(this).css('background', '#f2f2f2');
+                   }
+                   //Countdown
+                   if ($(this).attr('accepted') == 'yes') {
+                       $(this).find('.countDown').html('Done');
+                   }
+                   else {
+                       //Show countDown
+                       $(this).find('.countDown').countdown($(this).find('.countDown').text(), {
+                           precision: 10
+                       });
+                       $(this).find('.countDown').on('update.countdown', function(event) {
+                           $(this).html(event.strftime('%d Days,%H:%M:%S:%L'));
+                       });
+                       $(this).find('.countDown').on('finish.countdown', function(event) {
+                           $(this).html('0 Days,00:00:00:000 (LATE)').css('color', 'red');
+                       })
+                   }
+                   //Files
+                   if ($(this).attr('type') == 'file') {
+                       $(this).find('.result').viewDirectory('PROJECT INSIGHT', $(this).attr('id'));
+                   }
+                   try{
+                       var detailJson = JSON.parse($.trim($(this).find('.detail').text()));
+                       console.log("@Insight",detailJson);
+                       $(this).find('.detail').empty().append(
+                           $("<pre>").width("640px").html(JSON.stringify(detailJson,null,4))
+                       );
+                   }
+                   catch(e){
+
+                   }                   
+                   //Do not allow deletion for claimed tasks
+                   if ($(this).attr('processor_id') == 0) {
+                       //.deleteTask click event
+                       $(this).find('.deleteTask').click(function() {
+                           //Confirmation
+                           if (confirm('Are you sure you want to delete this task?')) {
+                               //Make the AJAX Call
+                               self.agxHandle.Core.executeDataPathway('deleteTask:' + $(this).attr('id'), function() {
+                                   //Refresh
+                                   self.reviewTasks();
+                               });
+                           }
+                       });
+                   }
+                   else {
+                       $(this).find('.deleteTask').remove();
+                   }
+                   //Task Status
+                   if ($(this).attr('accepted') == 'yes') {
+                       $(this).find('.taskStatus').addClass('fa-check-circle').css('color', 'green');
+                   }
+                   else {
+                       $(this).find('.taskStatus').addClass('fa-circle-o');
+                   }
+
+                   //Accept or Reject
+                   $(this).find('.taskStatus').click(function() {
+                       var taskStatus = $(this);
+                       //Form Data
+                       var formData = {
+                           'taskId': $(task).attr('id'),
+                           'apiOverride': 'absolutely'
+                       };
+                       if ($(taskStatus).hasClass('fa-circle-o')) {
+                           formData['accepted'] = 'yes';
+                       }
+                       else {
+                           formData['accepted'] = 'no';
+                       }
+                       //Confirmation
+                       if (confirm('Are you sure you want to update the Task completed status to ' + formData['accepted'].toUpperCase() + '?')) {
+                           //Make the AJAX Call
+                           self.agxHandle.Core.processClientData(formData, 'updateTaskStatus', function() {
+                               //Refresh
+                               self.reviewTasks();
+                           });
+                       }
+                   });
+               });
+           });
+       }
+
+       //Showtime
+	   $(document).ready(function(){
+			self.constructor();
+	   });
+   };
+   //Instance
+   var Insight = new ProjectInsight();
+</script>
+<h2 class='font-accident-two-normal uppercase'>Create Task</h2>
+<div class = 'container-fluid' id = 'tacticalCommandForm'>
+   <div class = 'row'>
+      <div class = 'col-md-2'>
+         Pipeline:
+      </div>
+      <div class = 'col-md-2'>
+         <select id = 'taskPipeline' class = 'form-control'>
+            <option value = 'Data'>Data</option>
+            <option value = 'Engineer'>Engineer</option>
+            <option value = 'Artisan'>Artisan</option>
+         </select>
+      </div>
+      <div class = 'col-md-2'>
+         Type:
+      </div>
+      <div class = 'col-md-2'>
+         <select id = 'taskType' class = 'form-control'>
+            <option value='directive'>Directive</option>
+            <option value='text'>Text</option>
+            <option value='code'>Code</option>
+            <option value='link'>Link</option>
+            <option value='file'>File</option>
+         </select>
+      </div>
+     <div class = 'col-md-2'>
+     	Search
+     </div>
+     <div class = 'col-md-2'>
+     	<input type ='text' id = 'searchTerm' placeholder = "Search Term" class ='form-control' ></input>
+     </div>
+   </div>
+   <div class = 'row'>
+      <div class = 'col-md-12'>
+         <textarea id = 'taskPipeline' class = 'form-control' style = 'width:98%;'></textarea>
+      </div>
+   </div>
+   <div class = 'row'>
+      <div class = 'col-md-12' style = 'margin-bottom:12px;padding-top:4px;padding-bottom:12px;border-bottom:dashed 1px rgb(64,64,64);'>
+         <div class = 'btn btn-md btn-success' id = 'doTheThingButton'> <i class = 'fa fa-check'></i> Do The Thing!&trade;</div>
+         <div class = 'btn btn-md btn-warning' id = 'refreshTasksButton'> <i class = 'fa fa-refresh'></i>  Refresh Tasks</div>
+      </div>
+   </div>
+   <div class = 'row'>
+      <div class = 'col-md-12'>
+         <h2 class='font-accident-two-normal uppercase'>This Week's Tasks</h2>
+      </div>
+      <div class = 'col-md-12'>
+         <table style = 'width:100%;' class = 'table' id = 'taskList'>
+            <thead>
+               <tr style = 'font-weight:bold;'>
+                  <td>
+                     <div style = 'width:142px;'><i class = 'fa fa-clock-o'></i> Status</div>
+                  </td>
+                  <td><i class = 'fa fa-folder'></i> Class</td>
+                  <td><i class = 'fa fa-book'></i> Detail</td>
+                  <td><i class = 'fa fa-inbox'></i> Result</td>
+                  <td><i class = 'fa fa-check-circle'></i> Completed</td>
+               </tr>
+            </thead>
+            <tbody>
+               <tr class = 'agx-template taskData' agx-name = 'task_list'>
+                  <td style = 'vertical-align:top;'>
+                     <div style = 'width:142px;' class = 'countDown'>{%due_date%}</div>
+                  </td>
+                  <td style = 'vertical-align:top;text-transform:uppercase;'>{%class%}</td>
+                  <td style = 'vertical-align:top;text-transform:none;word-break:break-word;width:400px;' class = 'detail'>{%detail%}</td>
+                  <td style = 'vertical-align:top;text-transform:none;' class = 'result'>{%result%}</td>
+                  <td style = 'vertical-align:top;text-transform:none;text-align:center;font-size:40px;'>
+                     <i class = 'fa taskStatus' style = 'color:black;'></i>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
